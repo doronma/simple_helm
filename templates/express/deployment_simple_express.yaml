@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-express-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-express
+
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: simple-express
+        version: V1
+      annotations:
+        description: "This is a very simple express service"
+    spec:
+      containers:
+        - image: doroncomputer/simple_express:1.0
+          name: simple-express
+          ports:
+            - name: http
+              containerPort: 3000
+
+          imagePullPolicy: "Always"

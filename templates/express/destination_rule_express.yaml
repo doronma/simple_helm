@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: simple-express-service-dr
+spec:
+  host: simple-express-service
+  subsets:
+    - name: V1
+      labels:
+        version: V1
+    - name: V2
+      labels:
+        version: V2

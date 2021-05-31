@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fastapisimple
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: fastapisimple
+      annotations:
+        description: "This is a very simple fastapi front end"
+    spec:
+      containers:
+        - image: doroncomputer/fastapisimple:v1
+          name: fastapisimple
+          ports:
+            - name: http
+              containerPort: 80
+
+          imagePullPolicy: "Always"
+          # Set environmnet variables
+          env:
+            - name: REDIS_HOST
+              # Get host from config file
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: redis.host
+            - name: EXPRESS_HOST
+              # Get host from config file
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: express.host
+            - name: EXPRESS_PORT
+              # Get port from config file
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: express.port
+            - name: REDIS_PORT
+              value: "6379"
+            - name: SOME_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secrets
+                  key: MYSEC
